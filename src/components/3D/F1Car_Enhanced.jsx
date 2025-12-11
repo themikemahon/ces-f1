@@ -3,59 +3,58 @@ import { Box } from '@react-three/drei'
 import * as THREE from 'three'
 
 export const F1Car = forwardRef((props, ref) => {
-  // PHOTOREALISTIC MATERIALS
-  // Key insight: envMapIntensity makes materials reflect the environment lighting
+  // ENHANCED MATERIALS - These now include envMapIntensity for proper reflections
   
-  // McLaren Orange - Glossy car paint
+  // McLaren Orange - The star of the show
   const mclarenOrange = {
     color: "#ff8000",
-    metalness: 0.8,
-    roughness: 0.45,        // Slightly more rough for realism
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
-    envMapIntensity: 2.0    // Reflects environment strongly
+    metalness: 0.8,         // High metalness for reflective car paint
+    roughness: 0.35,        // Slightly rough for realistic paint
+    clearcoat: 1.0,         // Maximum clearcoat for glossy finish
+    clearcoatRoughness: 0.05, // Very smooth clearcoat
+    envMapIntensity: 2.5    // ← KEY: This makes it reflect the environment strongly
   }
 
-  // Carbon Fiber - Technical weave
+  // Carbon Fiber - Technical and precise
   const carbonFiber = {
     color: "#1a1a1a",
     metalness: 0.9,
-    roughness: 0.2,
-    clearcoat: 0.6,
-    clearcoatRoughness: 0.3,
-    envMapIntensity: 1.5    // Moderate reflections
+    roughness: 0.15,        // Smooth carbon weave
+    clearcoat: 0.8,
+    clearcoatRoughness: 0.2,
+    envMapIntensity: 2.0    // ← Strong reflections for carbon
   }
 
-  // Rubber - Matte tires
+  // Rubber - Matte black tires
   const rubberBlack = {
     color: "#0a0a0a",
-    metalness: 0.0,
-    roughness: 0.9,
-    envMapIntensity: 0.2    // Minimal reflections
+    metalness: 0.0,         // Rubber isn't metallic
+    roughness: 0.95,        // Very rough/matte
+    envMapIntensity: 0.3    // ← Minimal reflections
   }
 
-  // Chrome - Mirror finish
+  // Chrome - Mirror-like metal parts
   const chrome = {
-    color: "#cccccc",
-    metalness: 1.0,
-    roughness: 0.1,
-    envMapIntensity: 3.0    // Maximum reflections
+    color: "#e8e8e8",
+    metalness: 1.0,         // Pure metal
+    roughness: 0.05,        // Almost mirror smooth
+    envMapIntensity: 3.0    // ← Maximum reflections for chrome
   }
 
-  // Wheel Rims - Metallic
+  // Wheel Rims - Metallic but not quite chrome
   const rimMaterial = {
-    color: "#aaaaaa",
+    color: "#b8b8b8",
     metalness: 1.0,
-    roughness: 0.2,
-    envMapIntensity: 2.0    // Strong reflections
+    roughness: 0.15,
+    envMapIntensity: 2.5    // ← Strong reflections
   }
 
-  // Matte Black - Non-reflective parts
+  // Matte Black - Non-reflective technical parts
   const matteBlack = {
     color: "#0f0f0f",
     metalness: 0.1,
     roughness: 0.8,
-    envMapIntensity: 0.4    // Low reflections
+    envMapIntensity: 0.5    // ← Low reflections
   }
 
   return (

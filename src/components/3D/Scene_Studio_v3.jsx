@@ -20,9 +20,9 @@ function StudioLightformers() {
 
   return (
     <>
-      {/* Ceiling light */}
+      {/* Main ceiling light - strong */}
       <Lightformer 
-        intensity={2.5} 
+        intensity={2} 
         rotation-x={Math.PI / 2} 
         position={[0, 5, -9]} 
         scale={[10, 10, 1]} 
@@ -35,7 +35,7 @@ function StudioLightformers() {
             <Lightformer 
               key={i} 
               form="circle" 
-              intensity={10} 
+              intensity={4} 
               rotation={[Math.PI / 2, 0, 0]} 
               position={[x, 4, i * 4]} 
               scale={[3, 1, 1]} 
@@ -44,9 +44,9 @@ function StudioLightformers() {
         </group>
       </group>
       
-      {/* Side fill lights */}
+      {/* Side fill lights - bright */}
       <Lightformer 
-        intensity={5} 
+        intensity={6} 
         rotation-y={Math.PI / 2} 
         position={[-5, 1, -1]} 
         scale={[20, 0.1, 1]} 
@@ -64,12 +64,20 @@ function StudioLightformers() {
         intensity={4}
       />
       
-      {/* McLaren orange accent */}
+      {/* Back fill light */}
+      <Lightformer 
+        intensity={3} 
+        rotation-y={Math.PI} 
+        position={[0, 2, -5]} 
+        scale={[10, 5, 1]} 
+      />
+      
+      {/* McLaren orange accent light */}
       <Float speed={5} floatIntensity={2} rotationIntensity={2}>
         <Lightformer 
           form="ring" 
           color="#ff8000" 
-          intensity={1} 
+          intensity={2} 
           scale={10} 
           position={[-15, 4, -18]} 
           target={[0, 0, 0]} 
@@ -79,25 +87,59 @@ function StudioLightformers() {
   )
 }
 
-// Simple infinite floor effect
-function InfiniteFloor() {
+// Studio Cyclorama - Creates the seamless floor-to-wall effect
+function StudioCyclorama() {
   return (
-    <mesh 
-      rotation={[-Math.PI / 2, 0, 0]} 
-      position={[0, -0.01, 0]} 
-      receiveShadow
-    >
-      <planeGeometry args={[200, 200]} />
-      <meshStandardMaterial 
-        color="#4a4a4a"
-        roughness={0.8}
-        metalness={0.2}
-        envMapIntensity={0.5}
-      />
-    </mesh>
+    <group>
+      {/* Main floor - visible and bright */}
+      <mesh 
+        rotation={[-Math.PI / 2, 0, 0]} 
+        position={[0, -0.01, 0]} 
+        receiveShadow
+      >
+        <planeGeometry args={[100, 100]} />
+        <meshStandardMaterial 
+          color="#d0d0d0"          // Light gray floor like mockup
+          roughness={0.2}           // Slightly glossy
+          metalness={0.1}           // Subtle reflection
+          envMapIntensity={1.5}     // Reflects environment
+        />
+      </mesh>
+
+      {/* Background wall - creates seamless transition */}
+      <mesh 
+        position={[0, 25, -15]} 
+        receiveShadow
+      >
+        <planeGeometry args={[100, 50]} />
+        <meshStandardMaterial 
+          color="#b8b8b8"           // Slightly darker for depth
+          roughness={0.3}
+          metalness={0.0}
+          envMapIntensity={1.0}
+        />
+      </mesh>
+
+      {/* Curved transition (cyclorama curve) - creates seamless look */}
+      <mesh 
+        position={[0, 0, -14]} 
+        rotation={[Math.PI / 4, 0, 0]}
+        receiveShadow
+      >
+        <cylinderGeometry args={[100, 100, 20, 32, 1, true, 0, Math.PI]} />
+        <meshStandardMaterial 
+          color="#c4c4c4"
+          roughness={0.25}
+          metalness={0.05}
+          envMapIntensity={1.2}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
   )
 }
 
+// Subtle camera animation
 function CameraRig() {
   return useFrame((state) => {
     const t = state.clock.elapsedTime
@@ -172,7 +214,7 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         animate()
       } else {
         const targetPos = new THREE.Vector3(4, 2, 6)
-        const targetLookAt = new THREE.Vector3(0, 0.5, 0)
+        const targetLookAt = new THREE.Vector3(0, 0, 0)
         
         const startPos = controlsRef.current.object.position.clone()
         const startTarget = controlsRef.current.target.clone()
@@ -257,66 +299,62 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
       gl={{ 
         antialias: true,
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.8,
+        toneMappingExposure: 1.8,      // Bright but not blown out
         outputColorSpace: THREE.SRGBColorSpace,
         logarithmicDepthBuffer: true,
         precision: 'highp'
       }}
     >
-      {/* Lighter background for more contrast */}
-      <color attach="background" args={['#4a4a4a']} />
+      {/* Bright neutral background color */}
+      <color attach="background" args={['#808080']} />
       
-      {/* Lighter fog to match background */}
-      <fog attach="fog" args={['#4a4a4a', 10, 25]} />
-      
-      {/* Key spotlight */}
+      {/* Strong key spotlight */}
       <spotLight 
-        position={[5, 10, 5]} 
+        position={[5, 15, 5]} 
         angle={0.3} 
         penumbra={1} 
         castShadow 
-        intensity={8} 
+        intensity={3} 
         shadow-bias={-0.0001}
         shadow-mapSize={[2048, 2048]}
       />
       
-      {/* Fill light */}
+      {/* Fill light from opposite side */}
       <spotLight 
-        position={[-3, 8, 3]} 
+        position={[-5, 10, 5]} 
         angle={0.4} 
         penumbra={1} 
-        intensity={0.8} 
+        intensity={2} 
+        castShadow={false}
       />
       
-      {/* Ambient light */}
-      <ambientLight intensity={0.8} />
-      
-      {/* Infinite floor - MUST be at same level as AccumulativeShadows */}
-      <InfiniteFloor />
+      {/* Strong ambient for overall brightness */}
+      <ambientLight intensity={1.5} />
       
       {/* 
-        FIXED: Soft contact shadows
-        Key changes for visible shadows:
-        1. position lowered to -0.01 (at floor level)
-        2. opacity increased to 1.0 (fully visible)
-        3. alphaTest lowered to 0.65 (more shadow shows through)
-        4. colorBlend increased to 2 (darker shadows)
-        5. radius reduced to 5 (tighter contact shadow)
+        Studio Cyclorama - visible floor and background
+        This creates the seamless studio look
+      */}
+      <StudioCyclorama />
+      
+      {/* 
+        AccumulativeShadows - soft contact shadows ON TOP of the floor
+        This adds the realistic soft shadows
       */}
       <AccumulativeShadows 
         temporal
         frames={100} 
-        color="#000000"
-        colorBlend={2}              // CHANGED: was 1, now 2 (darker shadows)
+        color="#9e9e9e"           // Gray shadow color
+        colorBlend={2}             // Strong shadow presence
         toneMapped={true}
-        alphaTest={0.65}            // CHANGED: was 0.8, now 0.65 (more visible)
-        opacity={1.0}               // CHANGED: was 0.7, now 1.0 (fully visible)
+        alphaTest={0.7}
+        opacity={0.8}              // Visible but not too dark
         scale={12} 
-        position={[0, -0.01, 0]}    // CHANGED: was 0.002, now -0.01 (at floor level)
+        position={[0, 0.001, 0]}   // Just above floor
       >
         <RandomizedLight 
           amount={8} 
-          radius={5}                // CHANGED: was 10, now 5 (tighter shadow)
+          radius={10} 
           ambient={0.5} 
           intensity={1}
           position={[2, 5, -1]} 
@@ -324,7 +362,9 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         />
       </AccumulativeShadows>
       
-      {/* Environment with Lightformers */}
+      {/* 
+        Environment with custom Lightformers
+      */}
       <Environment resolution={256} background={false}>
         <StudioLightformers />
       </Environment>
@@ -334,8 +374,8 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         enablePan={false}
         enableZoom={true}
         enableRotate={true}
-        minDistance={4}
-        maxDistance={20}
+        minDistance={2.5}
+        maxDistance={12}
         minPolarAngle={Math.PI / 6}
         maxPolarAngle={Math.PI / 2}
         autoRotate={true}
@@ -345,6 +385,7 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         target={[0, 0.5, 0]}
       />
       
+      {/* Subtle camera movement */}
       <CameraRig />
       
       <F1Car ref={carRef} />

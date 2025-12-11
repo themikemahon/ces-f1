@@ -1,14 +1,15 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Environment, Lightformer, Float, AccumulativeShadows, RandomizedLight } from '@react-three/drei'
+import { OrbitControls, Environment, Lightformer, Float } from '@react-three/drei'
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { F1Car } from './F1Car'
 import { Hotspots } from './Hotspots'
 
-// Studio Lightformers
+// Custom Lightformers component - this creates the studio lighting
 function StudioLightformers() {
   const group = useRef()
   
+  // Animate some lights for subtle movement
   useFrame((state, delta) => {
     if (group.current) {
       group.current.position.z += delta * 10
@@ -20,22 +21,22 @@ function StudioLightformers() {
 
   return (
     <>
-      {/* Ceiling light */}
+      {/* Main ceiling light - creates soft top lighting */}
       <Lightformer 
-        intensity={2.5} 
+        intensity={0.75} 
         rotation-x={Math.PI / 2} 
         position={[0, 5, -9]} 
         scale={[10, 10, 1]} 
       />
       
-      {/* Rotating strip lights */}
+      {/* Rotating strip lights - adds depth and dimension */}
       <group rotation={[0, 0.5, 0]}>
         <group ref={group}>
           {[2, 0, 2, 0, 2, 0, 2, 0].map((x, i) => (
             <Lightformer 
               key={i} 
               form="circle" 
-              intensity={10} 
+              intensity={2} 
               rotation={[Math.PI / 2, 0, 0]} 
               position={[x, 4, i * 4]} 
               scale={[3, 1, 1]} 
@@ -44,9 +45,9 @@ function StudioLightformers() {
         </group>
       </group>
       
-      {/* Side fill lights */}
+      {/* Side lights - fills in shadows and creates edge lighting */}
       <Lightformer 
-        intensity={5} 
+        intensity={4} 
         rotation-y={Math.PI / 2} 
         position={[-5, 1, -1]} 
         scale={[20, 0.1, 1]} 
@@ -55,16 +56,14 @@ function StudioLightformers() {
         rotation-y={Math.PI / 2} 
         position={[-5, -1, -1]} 
         scale={[20, 0.5, 1]} 
-        intensity={3}
       />
       <Lightformer 
         rotation-y={-Math.PI / 2} 
         position={[10, 1, 0]} 
         scale={[20, 1, 1]} 
-        intensity={4}
       />
       
-      {/* McLaren orange accent */}
+      {/* Accent light - adds McLaren orange glow (optional) */}
       <Float speed={5} floatIntensity={2} rotationIntensity={2}>
         <Lightformer 
           form="ring" 
@@ -75,34 +74,45 @@ function StudioLightformers() {
           target={[0, 0, 0]} 
         />
       </Float>
+      
+      {/* Additional rim lights for more definition */}
+      <Lightformer 
+        intensity={2} 
+        rotation-y={-Math.PI / 2} 
+        position={[5, 2, 0]} 
+        scale={[10, 2, 1]} 
+      />
+      <Lightformer 
+        intensity={1.5} 
+        rotation-y={Math.PI} 
+        position={[0, 1, -5]} 
+        scale={[10, 2, 1]} 
+      />
     </>
   )
 }
 
-// Simple infinite floor effect
-function InfiniteFloor() {
+// Background sphere with gradient - creates depth
+function BackgroundSphere() {
   return (
-    <mesh 
-      rotation={[-Math.PI / 2, 0, 0]} 
-      position={[0, -0.01, 0]} 
-      receiveShadow
-    >
-      <planeGeometry args={[200, 200]} />
-      <meshStandardMaterial 
-        color="#4a4a4a"
-        roughness={0.8}
-        metalness={0.2}
-        envMapIntensity={0.5}
+    <mesh scale={100}>
+      <sphereGeometry args={[1, 64, 64]} />
+      <meshBasicMaterial 
+        color="#2a2a2a" 
+        side={THREE.BackSide} 
+        toneMapped={false}
       />
     </mesh>
   )
 }
 
+// Subtle camera drift - adds life to the scene
 function CameraRig() {
   return useFrame((state) => {
     const t = state.clock.elapsedTime
-    state.camera.position.x += Math.sin(t / 5) * 0.0005
-    state.camera.position.y += Math.cos(t / 7) * 0.0005
+    // Very subtle sine wave movement
+    state.camera.position.x += Math.sin(t / 5) * 0.001
+    state.camera.position.y += Math.cos(t / 7) * 0.001
   })
 }
 
@@ -110,13 +120,17 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
   const controlsRef = useRef()
   const carRef = useRef()
 
-  // Handle focus mode camera positioning
+  // Handle focus mode camera positioning based on hotspot
   useEffect(() => {
     if (controlsRef.current) {
       if (focusMode && focusHotspot) {
+        // Calculate camera position to show hotspot on left side of screen
         const hotspotPos = new THREE.Vector3(...focusHotspot.position)
         
+        // Position camera so hotspot appears on left side (for right panel overlay)
         let cameraOffset
+        
+        // Different camera angles for different hotspots
         switch (focusHotspot.id) {
           case 'front-wing':
             cameraOffset = new THREE.Vector3(-2, 1, 3)
@@ -140,6 +154,7 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         const targetPos = hotspotPos.clone().add(cameraOffset)
         const targetLookAt = hotspotPos.clone()
         
+        // Animate to focus position
         const startPos = controlsRef.current.object.position.clone()
         const startTarget = controlsRef.current.target.clone()
         
@@ -171,8 +186,9 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         }
         animate()
       } else {
+        // Return to normal position
         const targetPos = new THREE.Vector3(4, 2, 6)
-        const targetLookAt = new THREE.Vector3(0, 0.5, 0)
+        const targetLookAt = new THREE.Vector3(0, 0, 0)
         
         const startPos = controlsRef.current.object.position.clone()
         const startTarget = controlsRef.current.target.clone()
@@ -257,85 +273,47 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
       gl={{ 
         antialias: true,
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.8,
-        outputColorSpace: THREE.SRGBColorSpace,
+        toneMappingExposure: 1.5, // Increased from 1.2 for brighter, more vibrant look
+        shadowMap: {
+          enabled: true,
+          type: THREE.PCFSoftShadowMap
+        },
+        outputColorSpace: THREE.SRGBColorSpace, // Better color reproduction
         logarithmicDepthBuffer: true,
         precision: 'highp'
       }}
     >
-      {/* Lighter background for more contrast */}
-      <color attach="background" args={['#4a4a4a']} />
-      
-      {/* Lighter fog to match background */}
-      <fog attach="fog" args={['#4a4a4a', 10, 25]} />
-      
-      {/* Key spotlight */}
-      <spotLight 
-        position={[5, 10, 5]} 
-        angle={0.3} 
-        penumbra={1} 
-        castShadow 
-        intensity={8} 
-        shadow-bias={-0.0001}
-        shadow-mapSize={[2048, 2048]}
-      />
-      
-      {/* Fill light */}
-      <spotLight 
-        position={[-3, 8, 3]} 
-        angle={0.4} 
-        penumbra={1} 
-        intensity={0.8} 
-      />
-      
-      {/* Ambient light */}
-      <ambientLight intensity={0.8} />
-      
-      {/* Infinite floor - MUST be at same level as AccumulativeShadows */}
-      <InfiniteFloor />
+      {/* Background sphere - creates depth instead of flat color */}
+      <BackgroundSphere />
       
       {/* 
-        FIXED: Soft contact shadows
-        Key changes for visible shadows:
-        1. position lowered to -0.01 (at floor level)
-        2. opacity increased to 1.0 (fully visible)
-        3. alphaTest lowered to 0.65 (more shadow shows through)
-        4. colorBlend increased to 2 (darker shadows)
-        5. radius reduced to 5 (tighter contact shadow)
+        THIS IS THE KEY DIFFERENCE: Custom Environment with Lightformers
+        Instead of just using a preset, we're creating custom studio lighting
       */}
-      <AccumulativeShadows 
-        temporal
-        frames={100} 
-        color="#000000"
-        colorBlend={2}              // CHANGED: was 1, now 2 (darker shadows)
-        toneMapped={true}
-        alphaTest={0.65}            // CHANGED: was 0.8, now 0.65 (more visible)
-        opacity={1.0}               // CHANGED: was 0.7, now 1.0 (fully visible)
-        scale={12} 
-        position={[0, -0.01, 0]}    // CHANGED: was 0.002, now -0.01 (at floor level)
-      >
-        <RandomizedLight 
-          amount={8} 
-          radius={5}                // CHANGED: was 10, now 5 (tighter shadow)
-          ambient={0.5} 
-          intensity={1}
-          position={[2, 5, -1]} 
-          bias={0.001}
-        />
-      </AccumulativeShadows>
-      
-      {/* Environment with Lightformers */}
       <Environment resolution={256} background={false}>
         <StudioLightformers />
       </Environment>
+      
+      {/* Subtle ambient to prevent pure black shadows */}
+      <ambientLight intensity={0.3} />
+      
+      {/* Optional: Add a key light for more dramatic lighting */}
+      <spotLight 
+        position={[10, 10, 5]} 
+        angle={0.3} 
+        penumbra={1} 
+        intensity={1} 
+        castShadow 
+        shadow-mapSize={[2048, 2048]}
+      />
       
       <OrbitControls
         ref={controlsRef}
         enablePan={false}
         enableZoom={true}
         enableRotate={true}
-        minDistance={4}
-        maxDistance={20}
+        minDistance={2.5}
+        maxDistance={12}
         minPolarAngle={Math.PI / 6}
         maxPolarAngle={Math.PI / 2}
         autoRotate={true}
@@ -345,6 +323,21 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         target={[0, 0.5, 0]}
       />
       
+      {/* 
+        Enhanced floor with better reflections
+        Key changes: Lower roughness, higher metalness, much higher envMapIntensity
+      */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
+        <planeGeometry args={[50, 50]} />
+        <meshStandardMaterial 
+          color="#1a1a1a" 
+          roughness={0.15}        // Reduced from 0.3 - smoother surface
+          metalness={0.8}         // Increased from 0.4 - more reflective
+          envMapIntensity={2.0}   // Massively increased from 0.3 - picks up environment
+        />
+      </mesh>
+      
+      {/* Subtle camera drift for life */}
       <CameraRig />
       
       <F1Car ref={carRef} />

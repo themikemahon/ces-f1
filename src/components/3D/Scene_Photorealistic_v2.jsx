@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import { F1Car } from './F1Car'
 import { Hotspots } from './Hotspots'
 
-// Studio Lightformers
+// Studio Lightformers - creates professional photo studio lighting
 function StudioLightformers() {
   const group = useRef()
   
@@ -20,9 +20,9 @@ function StudioLightformers() {
 
   return (
     <>
-      {/* Ceiling light */}
+      {/* Main ceiling light */}
       <Lightformer 
-        intensity={2.5} 
+        intensity={0.75} 
         rotation-x={Math.PI / 2} 
         position={[0, 5, -9]} 
         scale={[10, 10, 1]} 
@@ -35,7 +35,7 @@ function StudioLightformers() {
             <Lightformer 
               key={i} 
               form="circle" 
-              intensity={10} 
+              intensity={2} 
               rotation={[Math.PI / 2, 0, 0]} 
               position={[x, 4, i * 4]} 
               scale={[3, 1, 1]} 
@@ -46,7 +46,7 @@ function StudioLightformers() {
       
       {/* Side fill lights */}
       <Lightformer 
-        intensity={5} 
+        intensity={4} 
         rotation-y={Math.PI / 2} 
         position={[-5, 1, -1]} 
         scale={[20, 0.1, 1]} 
@@ -55,16 +55,14 @@ function StudioLightformers() {
         rotation-y={Math.PI / 2} 
         position={[-5, -1, -1]} 
         scale={[20, 0.5, 1]} 
-        intensity={3}
       />
       <Lightformer 
         rotation-y={-Math.PI / 2} 
         position={[10, 1, 0]} 
         scale={[20, 1, 1]} 
-        intensity={4}
       />
       
-      {/* McLaren orange accent */}
+      {/* McLaren orange accent light */}
       <Float speed={5} floatIntensity={2} rotationIntensity={2}>
         <Lightformer 
           form="ring" 
@@ -79,25 +77,21 @@ function StudioLightformers() {
   )
 }
 
-// Simple infinite floor effect
-function InfiniteFloor() {
+// Gradient background - creates depth and atmosphere
+function GradientBackground() {
   return (
-    <mesh 
-      rotation={[-Math.PI / 2, 0, 0]} 
-      position={[0, -0.01, 0]} 
-      receiveShadow
-    >
-      <planeGeometry args={[200, 200]} />
-      <meshStandardMaterial 
-        color="#4a4a4a"
-        roughness={0.8}
-        metalness={0.2}
-        envMapIntensity={0.5}
+    <mesh scale={100} rotation={[0, Math.PI / 2, 0]}>
+      <sphereGeometry args={[1, 64, 64]} />
+      <meshBasicMaterial 
+        color="#1a1a1a" 
+        side={THREE.BackSide}
+        toneMapped={false}
       />
     </mesh>
   )
 }
 
+// Subtle camera animation
 function CameraRig() {
   return useFrame((state) => {
     const t = state.clock.elapsedTime
@@ -172,7 +166,7 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         animate()
       } else {
         const targetPos = new THREE.Vector3(4, 2, 6)
-        const targetLookAt = new THREE.Vector3(0, 0.5, 0)
+        const targetLookAt = new THREE.Vector3(0, 0, 0)
         
         const startPos = controlsRef.current.object.position.clone()
         const startTarget = controlsRef.current.target.clone()
@@ -257,74 +251,58 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
       gl={{ 
         antialias: true,
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.8,
+        toneMappingExposure: 1.2,
         outputColorSpace: THREE.SRGBColorSpace,
         logarithmicDepthBuffer: true,
         precision: 'highp'
       }}
     >
-      {/* Lighter background for more contrast */}
-      <color attach="background" args={['#4a4a4a']} />
+      {/* Gradient background for depth */}
+      <GradientBackground />
       
-      {/* Lighter fog to match background */}
-      <fog attach="fog" args={['#4a4a4a', 10, 25]} />
-      
-      {/* Key spotlight */}
+      {/* Key spotlight for primary illumination */}
       <spotLight 
-        position={[5, 10, 5]} 
+        position={[0, 15, 0]} 
         angle={0.3} 
         penumbra={1} 
         castShadow 
-        intensity={8} 
+        intensity={2} 
         shadow-bias={-0.0001}
         shadow-mapSize={[2048, 2048]}
       />
       
-      {/* Fill light */}
-      <spotLight 
-        position={[-3, 8, 3]} 
-        angle={0.4} 
-        penumbra={1} 
-        intensity={0.8} 
-      />
-      
-      {/* Ambient light */}
-      <ambientLight intensity={0.8} />
-      
-      {/* Infinite floor - MUST be at same level as AccumulativeShadows */}
-      <InfiniteFloor />
+      {/* Soft ambient fill */}
+      <ambientLight intensity={0.5} />
       
       {/* 
-        FIXED: Soft contact shadows
-        Key changes for visible shadows:
-        1. position lowered to -0.01 (at floor level)
-        2. opacity increased to 1.0 (fully visible)
-        3. alphaTest lowered to 0.65 (more shadow shows through)
-        4. colorBlend increased to 2 (darker shadows)
-        5. radius reduced to 5 (tighter contact shadow)
+        THIS IS THE GAME CHANGER: AccumulativeShadows
+        Creates soft, photorealistic contact shadows like the mockup
       */}
       <AccumulativeShadows 
         temporal
         frames={100} 
         color="#000000"
-        colorBlend={2}              // CHANGED: was 1, now 2 (darker shadows)
+        colorBlend={0.5}
         toneMapped={true}
-        alphaTest={0.65}            // CHANGED: was 0.8, now 0.65 (more visible)
-        opacity={1.0}               // CHANGED: was 0.7, now 1.0 (fully visible)
-        scale={12} 
-        position={[0, -0.01, 0]}    // CHANGED: was 0.002, now -0.01 (at floor level)
+        alphaTest={0.75}
+        opacity={0.85}
+        scale={10} 
+        position={[0, -0.01, 0]}
       >
         <RandomizedLight 
           amount={8} 
-          radius={5}                // CHANGED: was 10, now 5 (tighter shadow)
+          radius={10} 
           ambient={0.5} 
           intensity={1}
-          position={[2, 5, -1]} 
+          position={[1, 5, -1]} 
           bias={0.001}
         />
       </AccumulativeShadows>
       
-      {/* Environment with Lightformers */}
+      {/* 
+        Environment with custom Lightformers
+        This creates the studio lighting reflections
+      */}
       <Environment resolution={256} background={false}>
         <StudioLightformers />
       </Environment>
@@ -334,8 +312,8 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         enablePan={false}
         enableZoom={true}
         enableRotate={true}
-        minDistance={4}
-        maxDistance={20}
+        minDistance={2.5}
+        maxDistance={12}
         minPolarAngle={Math.PI / 6}
         maxPolarAngle={Math.PI / 2}
         autoRotate={true}
@@ -345,6 +323,7 @@ export function Scene({ focusMode, focusHotspot, onCameraReset, onHotspotClick }
         target={[0, 0.5, 0]}
       />
       
+      {/* Subtle camera movement */}
       <CameraRig />
       
       <F1Car ref={carRef} />
