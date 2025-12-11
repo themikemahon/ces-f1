@@ -5,8 +5,6 @@ import * as THREE from 'three'
 import hotspotData from '../../data/hotspots.json'
 
 export function Hotspots({ onHotspotClick, focusMode }) {
-  // Hide hotspots in focus mode
-  if (focusMode) return null
   
   const { camera } = useThree()
   const [hotspotOpacities, setHotspotOpacities] = useState({})
@@ -17,10 +15,10 @@ export function Hotspots({ onHotspotClick, focusMode }) {
       const hotspotPos = new THREE.Vector3(...hotspot.position)
       const distance = camera.position.distanceTo(hotspotPos)
       
-      // Calculate opacity based on distance (closer = more opaque)
-      // Distance typically ranges from 3-12 based on camera limits
-      const normalizedDistance = Math.max(0, Math.min(1, (distance - 3) / 9))
-      const opacity = Math.max(0.3, 1 - normalizedDistance * 0.4)
+      // Keep hotspots bright and visible at all distances
+      // Only slight dimming at very far distances
+      const normalizedDistance = Math.max(0, Math.min(1, (distance - 6) / 15))
+      const opacity = Math.max(0.8, 1 - normalizedDistance * 0.2)
       
       newOpacities[hotspot.id] = opacity
     })
@@ -38,7 +36,7 @@ export function Hotspots({ onHotspotClick, focusMode }) {
           zIndexRange={[100, 0]}
         >
           <div
-            className={`hotspot-marker ${hotspot.category}`}
+            className={`hotspot-marker ${hotspot.category} ${focusMode ? 'focus-mode' : ''}`}
             onClick={() => onHotspotClick && onHotspotClick(hotspot)}
             style={{ 
               opacity: hotspotOpacities[hotspot.id] || 1

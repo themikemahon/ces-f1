@@ -1,8 +1,8 @@
-export function FocusPanel({ hotspot, onClose }) {
+export function FocusPanel({ hotspot, onClose, isExiting }) {
   if (!hotspot) return null
 
   return (
-    <div className="focus-panel">
+    <div className={`focus-panel ${isExiting ? 'exiting' : ''}`}>
       <div className="focus-panel-header">
         <button onClick={onClose} className="focus-back-btn">
           <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">

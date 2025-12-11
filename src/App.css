@@ -93,7 +93,14 @@ body {
   /* Ensure proper depth rendering */
   transform-style: preserve-3d;
   /* Smooth transitions for both scale and opacity */
-  transition: transform 0.3s ease-out, opacity 0.2s ease;
+  transition: transform 0.3s ease-out, opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* Focus mode transitions */
+.hotspot-marker.focus-mode {
+  opacity: 0 !important;
+  filter: blur(8px);
+  transform: translate(-50%, -50%) scale(0.8);
 }
 
 .hotspot-marker:hover {
@@ -120,24 +127,28 @@ body {
   transform: translate(-50%, -50%);
   z-index: 3;
   
-  /* Bright vibrant green orb matching reference */
+  /* Solid electric cyan-green orb - much less transparent */
   background: radial-gradient(
     circle at 30% 30%, 
     #ffffff 0%,
-    #88ff88 15%,
-    #44ff44 35%,
-    #22dd22 60%,
-    #00aa00 85%,
-    #006600 100%
+    #00ffff 10%,
+    #00ff88 25%,
+    #00ff44 45%,
+    #00dd22 70%,
+    #00aa00 90%,
+    #008800 100%
   );
   
-  /* Enhanced glow effect */
+  /* Make the orb completely opaque */
+  opacity: 1.0;
+  
+  /* Intense electric glow effect */
   box-shadow: 
-    inset 4px 4px 8px rgba(255, 255, 255, 0.8),
-    inset -4px -4px 8px rgba(0, 0, 0, 0.2),
-    0 0 25px rgba(68, 255, 68, 0.8),
-    0 0 50px rgba(68, 255, 68, 0.4),
-    0 0 75px rgba(68, 255, 68, 0.2);
+    inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(0, 255, 136, 1.0),
+    0 0 60px rgba(0, 255, 136, 0.6),
+    0 0 90px rgba(0, 255, 136, 0.3);
     
   /* Subtle glow animation */
   animation: orbGlow 3s ease-in-out infinite alternate;
@@ -170,23 +181,24 @@ body {
   transform: translate(-50%, -50%);
   z-index: 1;
   
-  /* Bright exoskeleton matching the vibrant core */
+  /* Electric cyan-green exoskeleton matching the vibrant core */
   background: radial-gradient(
     circle at 30% 30%, 
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(136, 255, 136, 0.5) 15%,
-    rgba(68, 255, 68, 0.4) 35%,
-    rgba(34, 221, 34, 0.3) 60%,
-    rgba(0, 170, 0, 0.2) 85%,
-    rgba(0, 102, 0, 0.1) 100%
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(0, 255, 255, 0.6) 10%,
+    rgba(0, 255, 136, 0.5) 25%,
+    rgba(0, 255, 68, 0.4) 45%,
+    rgba(0, 221, 34, 0.3) 70%,
+    rgba(0, 170, 0, 0.2) 90%,
+    rgba(0, 136, 0, 0.1) 100%
   );
   
-  /* Enhanced outer glow */
+  /* Intense electric outer glow */
   box-shadow: 
-    inset 3px 3px 6px rgba(255, 255, 255, 0.4),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.1),
-    0 0 30px rgba(68, 255, 68, 0.6),
-    0 0 60px rgba(68, 255, 68, 0.3);
+    inset 3px 3px 6px rgba(255, 255, 255, 0.5),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.2),
+    0 0 40px rgba(0, 255, 136, 0.8),
+    0 0 80px rgba(0, 255, 136, 0.4);
     
   /* Pulsing animation */
   animation: orbExoskeleton 2.5s ease-in-out infinite;
@@ -855,6 +867,37 @@ body {
 /* Improved focus panel entrance */
 .focus-panel-content {
   animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+}
+
+/* Focus panel exit animation */
+.focus-panel.exiting {
+  animation: fadeOutRight 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+.focus-panel.exiting .focus-panel-content {
+  animation: fadeOutDown 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+@keyframes fadeOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 }
 
 @keyframes fadeInUp {
