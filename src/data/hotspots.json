@@ -1,0 +1,59 @@
+{
+  "hotspots": [
+    {
+      "id": "front-wing",
+      "position": [0, 0.6, 3.5],
+      "title": "Multi-Element Front Wing",
+      "category": "performance",
+      "content": {
+        "description": "Advanced multi-element aerodynamics generate precise downforce for superior cornering performance. Each wing element is carefully positioned to direct airflow and create the exact downforce needed for high-speed cornering while minimizing drag on the straights.",
+        "videoUrl": null,
+        "imageUrl": null
+      }
+    },
+    {
+      "id": "engine",
+      "position": [0, 1.3, -1.0],
+      "title": "Hybrid Power Unit",
+      "category": "tech",
+      "content": {
+        "description": "State-of-the-art hybrid power unit combining a turbocharged V6 engine with advanced energy recovery systems. The ERS-H and ERS-K systems capture energy from exhaust heat and braking, delivering an additional 160hp for overtaking and performance.",
+        "videoUrl": null,
+        "imageUrl": null
+      }
+    },
+    {
+      "id": "wheel-front-right",
+      "position": [1.4, 0.7, 2.0],
+      "title": "Racing Wheels & Brakes",
+      "category": "performance",
+      "content": {
+        "description": "Precision-engineered 13-inch wheels with carbon fiber brake discs and advanced cooling systems. The tire compounds are specifically designed for different track conditions, providing optimal grip while the brake system can withstand temperatures exceeding 1000°C.",
+        "videoUrl": null,
+        "imageUrl": null
+      }
+    },
+    {
+      "id": "rear-wing",
+      "position": [0, 1.8, -2.3],
+      "title": "DRS Rear Wing System",
+      "category": "performance",
+      "content": {
+        "description": "Adjustable rear wing with DRS (Drag Reduction System) provides optimal balance between downforce and top speed. The system can reduce drag by up to 40% on straights, while generating maximum downforce through corners for superior handling.",
+        "videoUrl": null,
+        "imageUrl": null
+      }
+    },
+    {
+      "id": "cockpit",
+      "position": [-1.0, 1.3, 0.5],
+      "title": "Driver Cockpit & Halo",
+      "category": "tech",
+      "content": {
+        "description": "Advanced driver cockpit featuring the titanium halo safety device and sophisticated telemetry systems. The steering wheel contains over 25 controls for real-time car adjustments, while the halo provides crucial head protection in the event of an accident.",
+        "videoUrl": null,
+        "imageUrl": null
+      }
+    }
+  ]
+}

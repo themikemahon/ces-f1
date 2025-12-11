@@ -1,0 +1,976 @@
+/* Techy Design System with Open Sans */
+* {
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+html {
+  touch-action: pan-x pan-y;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+  background: #000;
+  overflow: hidden;
+  font-weight: 400;
+}
+
+/* App Layout */
+.app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.scene-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.ui-overlay > * {
+  pointer-events: auto;
+}
+
+/* Header */
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.15em;
+  margin: 0;
+  color: #ff6b00;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.08em;
+  margin: 8px 0 0 0;
+  opacity: 0.8;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Hotspot Styles */
+/* 3D Orb Hotspot Styles */
+.hotspot-marker {
+  position: relative;
+  width: 34px; /* Scaled down by 15% from 40px */
+  height: 34px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  /* Ensure proper depth rendering */
+  transform-style: preserve-3d;
+  /* Smooth transitions for both scale and opacity */
+  transition: transform 0.3s ease-out, opacity 0.2s ease;
+}
+
+.hotspot-marker:hover {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+/* Pause animations on hover and increase opacity */
+.hotspot-marker:hover .pulse-ring {
+  animation-play-state: paused;
+  opacity: 0.9 !important;
+}
+
+.hotspot-marker:hover .hotspot-dot {
+  animation-play-state: paused;
+}
+
+.hotspot-dot {
+  width: 24px; /* Scaled down by 15% from 28px */
+  height: 24px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  
+  /* Bright vibrant green orb matching reference */
+  background: radial-gradient(
+    circle at 30% 30%, 
+    #ffffff 0%,
+    #88ff88 15%,
+    #44ff44 35%,
+    #22dd22 60%,
+    #00aa00 85%,
+    #006600 100%
+  );
+  
+  /* Enhanced glow effect */
+  box-shadow: 
+    inset 4px 4px 8px rgba(255, 255, 255, 0.8),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.2),
+    0 0 25px rgba(68, 255, 68, 0.8),
+    0 0 50px rgba(68, 255, 68, 0.4),
+    0 0 75px rgba(68, 255, 68, 0.2);
+    
+  /* Subtle glow animation */
+  animation: orbGlow 3s ease-in-out infinite alternate;
+}
+
+.hotspot-dot::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.5) 40%,
+    transparent 70%
+  );
+  /* Glossy highlight reflection */
+}
+
+.pulse-ring {
+  width: 38px; /* Scaled down by 15% from 45px */
+  height: 38px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  
+  /* Bright exoskeleton matching the vibrant core */
+  background: radial-gradient(
+    circle at 30% 30%, 
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(136, 255, 136, 0.5) 15%,
+    rgba(68, 255, 68, 0.4) 35%,
+    rgba(34, 221, 34, 0.3) 60%,
+    rgba(0, 170, 0, 0.2) 85%,
+    rgba(0, 102, 0, 0.1) 100%
+  );
+  
+  /* Enhanced outer glow */
+  box-shadow: 
+    inset 3px 3px 6px rgba(255, 255, 255, 0.4),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.1),
+    0 0 30px rgba(68, 255, 68, 0.6),
+    0 0 60px rgba(68, 255, 68, 0.3);
+    
+  /* Pulsing animation */
+  animation: orbExoskeleton 2.5s ease-in-out infinite;
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    transparent 70%
+  );
+  /* Subtle highlight on the exoskeleton */
+}
+
+/* Unified orb styles for all categories - styling defined in main .hotspot-dot rule */
+
+.hotspot-marker.performance .pulse-ring,
+.hotspot-marker.tech .pulse-ring,
+.hotspot-marker.sustainability .pulse-ring {
+  border-color: rgba(134, 188, 37, 0.3);
+}
+
+@keyframes orbExoskeleton {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes orbGlow {
+  0% {
+    box-shadow: 
+      inset 4px 4px 8px rgba(255, 255, 255, 0.8),
+      inset -4px -4px 8px rgba(0, 0, 0, 0.2),
+      0 0 25px rgba(68, 255, 68, 0.8),
+      0 0 50px rgba(68, 255, 68, 0.4),
+      0 0 75px rgba(68, 255, 68, 0.2);
+  }
+  100% {
+    box-shadow: 
+      inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+      inset -4px -4px 8px rgba(0, 0, 0, 0.1),
+      0 0 35px rgba(68, 255, 68, 1.0),
+      0 0 70px rgba(68, 255, 68, 0.6),
+      0 0 100px rgba(68, 255, 68, 0.3);
+  }
+}
+
+/* Info Panel */
+.info-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 300px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.info-panel h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.info-panel p {
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* QR Code Styles */
+.qr-button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+}
+
+.qr-button {
+  background: #ff6b00;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.qr-button:hover {
+  background: #e55a00;
+  transform: scale(1.05);
+}
+
+.qr-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.qr-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 350px;
+  margin: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.qr-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.qr-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #333;
+}
+
+.qr-close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.qr-close-btn:hover {
+  color: #333;
+  background: #f0f0f0;
+}
+
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.qr-description {
+  text-align: center;
+  color: #666;
+  font-size: 0.85rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Navigation Bar Styles */
+.nav-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-button {
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button:hover {
+  background: rgba(0,0,0,0.8);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.nav-info {
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Loading Screen Styles */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.loading-title {
+  font-size: 3.5rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.1em;
+  color: #ff6b00;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  text-shadow: 0 0 40px rgba(255, 107, 0, 0.5);
+}
+
+.loading-subtitle {
+  font-size: 1.1rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+}
+
+.loading-bar {
+  width: 300px;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.loading-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b00, #ff8533);
+  transition: width 0.1s ease-out;
+}
+
+.loading-text {
+  margin-top: 25px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+/* Password Gate Styles */
+.password-gate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-form {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  min-width: 300px;
+}
+
+.password-title {
+  font-size: 1.4rem;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  margin-bottom: 35px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #333;
+}
+
+.password-input {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+}
+
+.password-input:focus {
+  outline: none;
+  border-color: #ff6b00;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.password-submit {
+  width: 100%;
+  background: linear-gradient(135deg, #ff6b00, #ff8533);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.password-submit:hover {
+  background: #e55a00;
+}
+
+.password-error {
+  color: #ff4444;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+/* Idle Reset Styles */
+.idle-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.idle-modal {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.idle-title {
+  font-size: 1.2rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.idle-countdown {
+  font-size: 3.5rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: #ff6b00;
+  margin-bottom: 15px;
+  text-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+}
+
+.idle-instruction {
+  color: #666;
+  font-size: 0.85rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+/* Focus Mode Styles - Keep full width */
+.scene-container.focus-mode {
+  width: 100% !important;
+}
+
+.focus-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(26, 26, 26, 0.85) 0%, 
+    rgba(45, 45, 45, 0.85) 50%, 
+    rgba(26, 26, 26, 0.85) 100%);
+  border-left: 1px solid rgba(255, 107, 0, 0.3);
+  color: white;
+  overflow-y: auto;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.4s ease-out;
+  backdrop-filter: blur(15px);
+}
+
+.focus-panel-header {
+  padding: 30px 40px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.focus-back-btn {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 14px 24px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(15px);
+}
+
+.focus-back-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.focus-panel-content {
+  padding: 40px;
+  flex: 1;
+}
+
+.focus-category-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.focus-category-badge.performance,
+.focus-category-badge.tech,
+.focus-category-badge.sustainability {
+  background: rgba(134, 188, 37, 0.2);
+  color: #86bc25;
+  border: 1px solid #86bc25;
+}
+
+.focus-title {
+  font-size: 2.8rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  margin-bottom: 30px;
+  line-height: 1.1;
+  color: #ff6b00;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+}
+
+.focus-description {
+  font-size: 1.1rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.7;
+  margin-bottom: 30px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.02em;
+}
+
+.focus-video, .focus-image {
+  margin-top: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.focus-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Navigation Reset Button */
+.nav-reset-btn {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+}
+
+/* Removed duplicate hotspot styles - using unified 3D orb design */
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .focus-panel {
+    width: 60%;
+  }
+  
+  .scene-container.focus-mode {
+    width: 40% !important;
+  }
+  
+  .focus-title {
+    font-size: 2rem;
+  }
+  
+  .focus-description {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .focus-panel {
+    width: 100%;
+  }
+  
+  .scene-container.focus-mode {
+    display: none;
+  }
+  
+  .focus-panel-content {
+    padding: 20px;
+  }
+  
+  .focus-title {
+    font-size: 1.8rem;
+  }
+}
+/* QR URL Display */
+.qr-url-display {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.qr-url-display small {
+  color: #666;
+  font-size: 0.75rem;
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+/* Animation improvements */
+.scene-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  transition: none; /* Remove problematic transition */
+}
+
+/* Removed duplicate scene-container width rule - keeping full width */
+
+/* Removed problematic focus panel animation */
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Smooth hotspot transitions - integrated into main orb styles */
+
+/* Removed problematic lens effect that was causing black overlay */
+
+/* Improved focus panel entrance */
+.focus-panel-content {
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Transition overlay for smooth camera moves */
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.transition-blur {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  animation: motionBlur 0.6s ease-out;
+}
+
+@keyframes motionBlur {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+/* Additional Techy Design Elements */
+
+/* Removed scanline animation - was causing distracting gradient bars */
+
+/* Removed grid pattern overlay for cleaner look */
+
+/* Enhanced button hover effects */
+.password-submit:hover {
+  background: linear-gradient(135deg, #ff8533, #ffaa66);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(255, 107, 0, 0.4);
+}
+
+.qr-button:hover {
+  box-shadow: 0 6px 25px rgba(255, 107, 0, 0.4);
+}
+
+/* Removed duplicate focus panel background */
+
+/* Techy loading bar */
+.loading-progress {
+  background: linear-gradient(90deg, 
+    #ff6b00, 
+    #ff8533, 
+    #ffaa66, 
+    #ff8533, 
+    #ff6b00);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Enhanced category badges with Deloitte green glow */
+.focus-category-badge.performance,
+.focus-category-badge.tech,
+.focus-category-badge.sustainability {
+  background: rgba(134, 188, 37, 0.15);
+  color: #86bc25;
+  border: 1px solid #86bc25;
+  box-shadow: 0 0 20px rgba(134, 188, 37, 0.3);
+}
+
+/* Removed duplicate glow effects - integrated into 3D orb design */
+/* Global button improvements */
+button {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+/* Enhanced QR modal styling */
+.qr-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Password form improvements */
+.password-form {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Idle modal improvements */
+.idle-modal {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}

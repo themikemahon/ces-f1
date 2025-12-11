@@ -1,0 +1,25 @@
+{
+  "app": {
+    "title": "McLaren F1 Experience",
+    "subtitle": "Powered by Deloitte",
+    "password": "mclaren2025",
+    "idleTimeout": 60000
+  },
+  "camera": {
+    "defaultPosition": [4, 2, 6],
+    "minDistance": 3,
+    "maxDistance": 12,
+    "autoRotateSpeed": 0.5
+  },
+  "leadGeneration": {
+    "qrCodeUrl": "https://deloitte.com/mclaren-f1-experience",
+    "qrCodeText": "Scan to continue this experience on your phone"
+  },
+  "colors": {
+    "mclarenOrange": "#ff6b00",
+    "deloitteGreen": "#86bc25",
+    "performance": "#ff4444",
+    "tech": "#4444ff",
+    "sustainability": "#44ff44"
+  }
+}
