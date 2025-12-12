@@ -1,7 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export function QRCodeComponent({ selectedModel, onModalChange }) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   const handleExpand = (expanded) => {
     setIsExpanded(expanded)
@@ -13,25 +23,41 @@ export function QRCodeComponent({ selectedModel, onModalChange }) {
   // Static Deloitte article URL
   const qrUrl = "https://www.deloitte.com/us/en/insights/topics/business-strategy-growth/racing-digital-twin-technology.html"
   
-  // Generate QR code using QR Server API
+  // For mobile, directly navigate to URL instead of showing modal
+  const handleClick = () => {
+    if (isMobile) {
+      window.open(qrUrl, '_blank')
+    } else {
+      handleExpand(true)
+    }
+  }
+  
+  // Generate QR code using QR Server API (only for desktop)
   const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}`
 
   return (
     <>
-      {/* Fixed QR button */}
-      <div className="qr-button-container">
+      {/* Info button - smaller on mobile */}
+      <div className={`info-button-container ${isMobile ? 'mobile' : ''}`}>
         <button
-          onClick={() => handleExpand(true)}
-          className="qr-button"
+          onClick={handleClick}
+          className={`info-button ${isMobile ? 'mobile' : ''}`}
+          title={isMobile ? "Learn more about racing digital twin technology" : "Share this experience"}
         >
-          <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm6 0h2v2h-2V5zm4 0h2v2h-2V5zm-4 4h2v2h-2V9zm4 0h2v2h-2V9zm-4 4h2v2h-2v-2zm4 0h2v2h-2v-2zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm8-2h2v2h-2v-2zm0 4h2v2h-2v-2zm4-4h2v2h-2v-2zm0 4h2v2h-2v-2z"/>
-          </svg>
+          {isMobile ? (
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+          ) : (
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm6 0h2v2h-2V5zm4 0h2v2h-2V5zm-4 4h2v2h-2V9zm4 0h2v2h-2V9zm-4 4h2v2h-2v-2zm4 0h2v2h-2v-2zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm8-2h2v2h-2v-2zm0 4h2v2h-2v-2zm4-4h2v2h-2v-2zm0 4h2v2h-2v-2z"/>
+            </svg>
+          )}
         </button>
       </div>
 
-      {/* Expanded QR Modal */}
-      {isExpanded && (
+      {/* Desktop QR Modal */}
+      {!isMobile && isExpanded && (
         <div className="qr-modal-overlay" onClick={() => handleExpand(false)}>
           <div className="qr-modal" onClick={(e) => e.stopPropagation()}>
             <div className="qr-modal-header">

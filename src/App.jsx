@@ -13,6 +13,7 @@ import { FocusPanel } from './components/UI/FocusPanel'
 import { ModelSelector } from './components/UI/ModelSelector'
 import { PasswordGate } from './components/Kiosk/PasswordGate'
 import { IdleReset } from './components/Kiosk/IdleReset'
+import { RotationPrompt } from './components/Mobile/RotationPrompt'
 import './App.css'
 
 // Post-processing effects - subtle bloom including orange paint
@@ -173,6 +174,7 @@ function App() {
 
   return (
     <div className="app">
+      <RotationPrompt />
       <Canvas 
         gl={{ logarithmicDepthBuffer: true, antialias: false }} 
         dpr={[1, 1.5]} 

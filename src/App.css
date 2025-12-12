@@ -306,7 +306,46 @@ body {
   color: #333;
 }
 
-/* QR Code Styles */
+/* Info Button Styles (replaces QR Code on mobile) */
+.info-button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+}
+
+.info-button-container.mobile {
+  bottom: 15px;
+  right: 15px;
+}
+
+.info-button {
+  background: #ff6b00;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.info-button.mobile {
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.info-button:hover {
+  background: #e55a00;
+  transform: scale(1.05);
+}
+
+/* Legacy QR button styles for backward compatibility */
 .qr-button-container {
   position: fixed;
   bottom: 20px;
@@ -804,8 +843,11 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Mobile Focus Panel - Full Screen */
   .focus-panel {
     width: 100%;
+    height: 100vh;
+    border-left: none;
   }
   
   .scene-container.focus-mode {
@@ -817,7 +859,96 @@ body {
   }
   
   .focus-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+  
+  .focus-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* Mobile Header */
+  .header {
+    top: 15px;
+    left: 15px;
+  }
+  
+  .title {
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+  }
+  
+  .subtitle {
+    font-size: 0.75rem;
+    margin-top: 5px;
+  }
+  
+  /* Mobile Navigation */
+  .nav-container {
+    top: 15px;
+    right: 15px;
+  }
+  
+  .nav-button {
+    width: 40px;
+    height: 40px;
+    font-size: 0.8rem;
+  }
+  
+  /* Mobile Model Selector */
+  .model-selector {
+    top: 15px;
+    right: 70px;
+  }
+  
+  .model-selector-button {
+    min-width: 160px;
+    padding: 10px 16px;
+  }
+  
+  .model-name {
+    font-size: 0.7rem;
+  }
+  
+  /* Mobile Hotspots - Slightly Larger for Touch */
+  .hotspot-marker {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .hotspot-dot {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .pulse-ring {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small mobile adjustments */
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .model-selector {
+    right: 60px;
+  }
+  
+  .model-selector-button {
+    min-width: 140px;
+    padding: 8px 12px;
+  }
+  
+  .focus-title {
+    font-size: 1.4rem;
+  }
+  
+  .focus-panel-content {
+    padding: 15px;
   }
 }
 /* QR URL Display */
@@ -1114,6 +1245,122 @@ body {
   color: #86bc25;
   border: 1px solid #86bc25;
   box-shadow: 0 0 20px rgba(134, 188, 37, 0.3);
+}
+
+/* Mobile Rotation Prompt */
+.rotation-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(10px);
+}
+
+.rotation-prompt {
+  text-align: center;
+  color: white;
+  padding: 40px 20px;
+  max-width: 350px;
+}
+
+.rotation-icon {
+  color: #ff8000;
+  margin-bottom: 30px;
+  animation: rotateIcon 3s ease-in-out infinite;
+}
+
+.rotation-icon svg {
+  transform-origin: 50% 50%;
+}
+
+.rotation-title {
+  font-size: 1.8rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+  color: #ff8000;
+  text-transform: uppercase;
+}
+
+.rotation-message {
+  font-size: 1rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.rotation-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.phone-portrait, .phone-landscape {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-body {
+  width: 32px;
+  height: 56px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 3px;
+  transition: all 0.5s ease;
+}
+
+.phone-body.landscape {
+  width: 56px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.arrow-icon {
+  color: rgba(255, 255, 255, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes rotateIcon {
+  0%, 100% { 
+    transform: rotate(0deg); 
+  }
+  50% { 
+    transform: rotate(360deg); 
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1); 
+  }
 }
 
 /* Removed duplicate glow effects - integrated into 3D orb design */
