@@ -344,7 +344,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 9999;
 }
 
 .qr-modal {
@@ -978,6 +978,134 @@ body {
   100% { background-position: 200% 0; }
 }
 
+/* Model Selector Styles */
+.model-selector {
+  position: fixed;
+  top: 20px;
+  right: 80px;
+  z-index: 1000;
+}
+
+.model-selector-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 12px 20px;
+  color: white;
+  cursor: pointer;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(15px);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.model-selector-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.model-name {
+  font-size: 0.8rem;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ff8000;
+}
+
+.dropdown-arrow {
+  transition: transform 0.2s ease;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 8px;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.model-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-top: 8px;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.model-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.model-option:last-child {
+  border-bottom: none;
+}
+
+.model-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.model-option.selected {
+  background: rgba(255, 128, 0, 0.2);
+}
+
+.model-option.selected .model-name {
+  color: #ff8000;
+}
+
+.model-option .model-name {
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.check-icon {
+  color: #ff8000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .model-selector {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .model-selector-button {
+    min-width: 180px;
+    padding: 10px 12px;
+  }
+  
+  .model-name {
+    font-size: 13px;
+  }
+  
+  .model-description {
+    font-size: 11px;
+  }
+}
+
 /* Enhanced category badges with Deloitte green glow */
 .focus-category-badge.performance,
 .focus-category-badge.tech,
@@ -992,6 +1120,24 @@ body {
 /* Global button improvements */
 button {
   font-family: 'Open Sans', sans-serif !important;
+  outline: none !important;
+}
+
+button:focus {
+  outline: none !important;
+}
+
+button:active {
+  outline: none !important;
+}
+
+/* Remove focus outline from all interactive elements */
+* {
+  outline: none !important;
+}
+
+*:focus {
+  outline: none !important;
 }
 
 /* Enhanced QR modal styling */

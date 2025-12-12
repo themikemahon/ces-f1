@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import * as THREE from 'three'
 import hotspotData from '../../data/hotspots.json'
 
-export function Hotspots({ onHotspotClick, focusMode }) {
+export function Hotspots({ onHotspotClick, focusMode, hideHotspots }) {
   
   const { camera } = useThree()
   const [hotspotOpacities, setHotspotOpacities] = useState({})
@@ -39,7 +39,8 @@ export function Hotspots({ onHotspotClick, focusMode }) {
             className={`hotspot-marker ${hotspot.category} ${focusMode ? 'focus-mode' : ''}`}
             onClick={() => onHotspotClick && onHotspotClick(hotspot)}
             style={{ 
-              opacity: hotspotOpacities[hotspot.id] || 1
+              opacity: hideHotspots ? 0 : (hotspotOpacities[hotspot.id] || 1),
+              pointerEvents: hideHotspots ? 'none' : 'auto'
             }}
           >
             <div className="pulse-ring"></div>

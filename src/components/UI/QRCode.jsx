@@ -1,16 +1,27 @@
 import { useState } from 'react'
-import { QRCodeSVG } from 'react-qr-code'
 
-export function QRCodeComponent() {
+export function QRCodeComponent({ selectedModel, onModalChange }) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const qrUrl = "https://www.deloitte.com/uk/en/about/story/impact/circularity-handbook-formula-one.html"
+  
+  const handleExpand = (expanded) => {
+    setIsExpanded(expanded)
+    if (onModalChange) {
+      onModalChange(expanded)
+    }
+  }
+  
+  // Static Deloitte article URL
+  const qrUrl = "https://www.deloitte.com/us/en/insights/topics/business-strategy-growth/racing-digital-twin-technology.html"
+  
+  // Generate QR code using QR Server API
+  const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}`
 
   return (
     <>
       {/* Fixed QR button */}
       <div className="qr-button-container">
         <button
-          onClick={() => setIsExpanded(true)}
+          onClick={() => handleExpand(true)}
           className="qr-button"
         >
           <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -21,12 +32,12 @@ export function QRCodeComponent() {
 
       {/* Expanded QR Modal */}
       {isExpanded && (
-        <div className="qr-modal-overlay">
-          <div className="qr-modal">
+        <div className="qr-modal-overlay" onClick={() => handleExpand(false)}>
+          <div className="qr-modal" onClick={(e) => e.stopPropagation()}>
             <div className="qr-modal-header">
-              <h3>Get This Experience</h3>
+              <h3>Share This Experience</h3>
               <button
-                onClick={() => setIsExpanded(false)}
+                onClick={() => handleExpand(false)}
                 className="qr-close-btn"
               >
                 ×
@@ -34,11 +45,20 @@ export function QRCodeComponent() {
             </div>
             
             <div className="qr-code-container">
-              <QRCodeSVG value={qrUrl} size={200} />
+              <img 
+                src={qrCodeImageUrl}
+                alt="QR Code"
+                style={{ 
+                  width: '200px', 
+                  height: '200px',
+                  border: '1px solid #ddd',
+                  borderRadius: '8px'
+                }}
+              />
             </div>
             
             <p className="qr-description">
-              Scan to learn more about McLaren F1 and Deloitte's sustainability initiatives
+              Scan to learn more about racing digital twin technology and Deloitte's insights
             </p>
             
             <div className="qr-url-display">

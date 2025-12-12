@@ -4,11 +4,13 @@ import { Canvas } from '@react-three/fiber'
 import { Environment, Lightformer, ContactShadows, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { Porsche911 } from './components/3D/Porsche911_Lambo_Style'
+import { F1CarGeometry } from './components/3D/F1CarGeometry'
 import { Hotspots } from './components/3D/Hotspots'
 import { QRCodeComponent } from './components/UI/QRCode'
 import { NavigationBar } from './components/UI/NavigationBar'
 import { LoadingScreen } from './components/UI/LoadingScreen'
 import { FocusPanel } from './components/UI/FocusPanel'
+import { ModelSelector } from './components/UI/ModelSelector'
 import { PasswordGate } from './components/Kiosk/PasswordGate'
 import { IdleReset } from './components/Kiosk/IdleReset'
 import './App.css'
@@ -32,6 +34,8 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [focusHotspot, setFocusHotspot] = useState(null)
   const [isExitingFocus, setIsExitingFocus] = useState(false)
+  const [selectedModel, setSelectedModel] = useState('f1-geometry')
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false)
   const controlsRef = useRef()
 
   // Reusable smooth camera animation with distance-based timing
@@ -179,11 +183,19 @@ function App() {
         <color attach="background" args={['#000000']} />
         <fog attach="fog" args={['#000000', 8, 25]} />
         
-        {/* Car with rotation like lambo */}
-        <Porsche911 
-          rotation={[0, Math.PI / 1.5, 0]} 
-          scale={0.015} 
-        />
+        {/* Dynamic car model based on selection */}
+        {selectedModel === 'f1-geometry' ? (
+          <F1CarGeometry 
+            rotation={[0, Math.PI / 1.5, 0]} 
+            scale={1.25} 
+            position={[0, -0.58, 0]}
+          />
+        ) : (
+          <Porsche911 
+            rotation={[0, Math.PI / 1.5, 0]} 
+            scale={0.015} 
+          />
+        )}
         
         {/* Diffuse lighting to avoid harsh reflections */}
         <hemisphereLight intensity={1.2} />
@@ -268,7 +280,7 @@ function App() {
           target={[0, 0, 0]}
         />
         
-        <Hotspots onHotspotClick={handleHotspotClick} focusMode={!!focusHotspot} />
+        <Hotspots onHotspotClick={handleHotspotClick} focusMode={!!focusHotspot} hideHotspots={isQRModalOpen} />
       </Canvas>
       
       {/* Left-side click area to exit focus mode */}
@@ -298,6 +310,12 @@ function App() {
         />
       )}
       
+      {/* Model Selector */}
+      <ModelSelector 
+        selectedModel={selectedModel}
+        onModelChange={setSelectedModel}
+      />
+
       {/* UI Overlay */}
       <div className="ui-overlay">
         <header className="header">
@@ -308,7 +326,7 @@ function App() {
         </header>
         
         <NavigationBar onReset={handleReset} />
-        {!focusHotspot && <QRCodeComponent />}
+        {!focusHotspot && <QRCodeComponent selectedModel={selectedModel} onModalChange={setIsQRModalOpen} />}
       </div>
       
       <IdleReset onReset={handleReset} timeout={60000} />
